@@ -25,10 +25,10 @@ public class MeetingRepositoryJpaImpl implements MeetingRepository {
             CriteriaQuery<Meeting> cq = cb.createQuery(Meeting.class);
             Root<Meeting> root = cq.from(Meeting.class);
 
-            // Use LEFT JOIN FETCH to eagerly load tour logs
+            // Use LEFT JOIN FETCH to eagerly load meeting notes
             root.fetch("notes", JoinType.LEFT);
 
-            // Add DISTINCT to avoid duplicate Tour entities due to JOIN
+            // Add DISTINCT to avoid duplicate Meeting entities due to JOIN
             cq.select(root).distinct(true);
 
             List<Meeting> meetings = em.createQuery(cq).getResultList();

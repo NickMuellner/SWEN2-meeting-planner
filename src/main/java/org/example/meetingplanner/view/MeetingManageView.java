@@ -53,7 +53,7 @@ public class MeetingManageView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.trace("Initialize TourCreateView");
+        log.trace("Initialize MeetingManageView");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         SpinnerValueFactory<LocalTime> fromTimeFactory = new SpinnerValueFactory<LocalTime>() {
             {
@@ -109,14 +109,14 @@ public class MeetingManageView implements Initializable {
 
     @FXML
     private void saveMeeting(ActionEvent event) {
-        log.trace("Saving tour");
+        log.trace("Saving Meeting");
         if (isPopupMode) {
             if (showInvalidInput(viewModel.createMeeting())) {
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.close();
             }
         } else {
-            showInvalidInput(viewModel.updateTour());
+            showInvalidInput(viewModel.updateMeeting());
         }
     }
 

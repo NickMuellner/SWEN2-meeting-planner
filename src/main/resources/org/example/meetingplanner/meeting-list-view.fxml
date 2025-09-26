@@ -25,7 +25,7 @@
         </HBox>
         <ListView fx:id="meetingList" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <placeholder>
-                <Label text="No Tours" />
+                <Label text="No Meetings" />
             </placeholder>
         </ListView>
     </children>

@@ -37,25 +37,25 @@ public class MeetingListViewModel {
         meetingStatusPauseTransition.setOnFinished(event -> fadeTransitionProperty.getValue().play());
 
         selectedMeeting.addListener((obs, oldValue, newValue) -> {
-            meetingListService.selectTour(newValue);
+            meetingListService.selectMeeting(newValue);
             deleteMeetingVisible.setValue(newValue != null);
         });
-        eventManager.subscribe(Event.MEETING_UPDATED, this::onTourUpdated);
-        eventManager.subscribe(Event.MEETING_CREATED, this::onTourUpdated);
+        eventManager.subscribe(Event.MEETING_UPDATED, this::onMeetingUpdated);
+        eventManager.subscribe(Event.MEETING_CREATED, this::onMeetingUpdated);
         eventManager.subscribe(Event.MEETING_CREATED, this::selectMeeting);
-        eventManager.subscribe(Event.MEETING_UPDATED_FAILED, this::onTourUpdatedFailed);
+        eventManager.subscribe(Event.MEETING_UPDATED_FAILED, this::onMeetingUpdatedFailed);
         eventManager.subscribe(Event.SEARCH_STARTED, this::search);
 
         Platform.runLater(() -> meetings.getValue().setAll(meetingListService.getMeetings()));
     }
 
-    private void onTourUpdated(Object s) {
+    private void onMeetingUpdated(Object s) {
         String status = (String) s;
         meetings.getValue().setAll(meetingListService.getMeetings());
         displayStatus(MeetingUpdateStatus.valueOf(status.toUpperCase()));
     }
 
-    private void onTourUpdatedFailed(Object s) {
+    private void onMeetingUpdatedFailed(Object s) {
         String status = (String) s;
         displayStatus(MeetingUpdateStatus.valueOf(status.toUpperCase()));
     }
@@ -78,15 +78,15 @@ public class MeetingListViewModel {
         displayStatus(MeetingUpdateStatus.SEARCHED);
     }
 
-    public Property<ObservableList<Meeting>> tours() {
+    public Property<ObservableList<Meeting>> meetings() {
         return meetings;
     }
 
-    public Property<Meeting> selectedTour() {
+    public Property<Meeting> selectedMeeting() {
         return selectedMeeting;
     }
 
-    public void deleteTour() {
+    public void deleteMeeting() {
         meetingListService.removeMeeting(selectedMeeting.getValue());
         meetings.getValue().setAll(meetingListService.getMeetings());
         displayStatus(MeetingUpdateStatus.SUCCESS);

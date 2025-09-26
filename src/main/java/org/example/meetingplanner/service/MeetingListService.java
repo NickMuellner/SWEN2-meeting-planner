@@ -6,7 +6,6 @@ import org.example.meetingplanner.model.Meeting;
 import org.example.meetingplanner.model.MeetingNote;
 import org.example.meetingplanner.repository.MeetingRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class MeetingListService {
         meetings = new ArrayList<>(meetingRepository.findAll());
     }
 
-    public void selectTour(Meeting selectedItem) {
+    public void selectMeeting(Meeting selectedItem) {
         selectedMeeting = selectedItem;
         eventManager.publish(Event.MEETING_SELECTED, "");
     }

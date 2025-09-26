@@ -82,14 +82,14 @@ public class MeetingManageViewModel {
         return notes;
     }
 
-    private List<InvalidMeetingInput> manageTour(boolean isNewTour) {
+    private List<InvalidMeetingInput> manageMeeting(boolean isNewMeeting) {
         MeetingUpdateStatus status = MeetingUpdateStatus.SUCCESS;
         List<InvalidMeetingInput> invalidMeetingInput = new ArrayList<>();
 
         Map<StringProperty, InvalidMeetingInput> inputs = Map.of(
                 title, InvalidMeetingInput.INVALID_TITLE
                 //from, InvalidMeetingInput.INVALID_FROM,
-                //to, InvalidMeetingInput.INVALID_TO
+                //to, InvalidMeetingInput.INVALID_TO todo
         );
         inputs.forEach((key, error) -> {
             if (key.getValue() == null || key.getValue().trim().isEmpty()) {
@@ -98,29 +98,29 @@ public class MeetingManageViewModel {
         });
 
         if (invalidMeetingInput.isEmpty()) {
-            if (isNewTour) {
+            if (isNewMeeting) {
                 meetingListService.addMeeting(new Meeting(title.get(), LocalDateTime.of(fromDate.get(), fromTime.get()), LocalDateTime.of(toDate.get(), toTime.get()), agenda.get()));
                 meetingListService.updateMeetingNotes(new ArrayList<>(notes));
             } else {
                 meetingListService.updateMeeting(title.get(), LocalDateTime.of(fromDate.get(), fromTime.get()), LocalDateTime.of(toDate.get(), toTime.get()), agenda.get());
                 meetingListService.updateMeetingNotes(new ArrayList<>(notes));
             }
-            eventManager.publish(isNewTour ? Event.MEETING_CREATED : Event.MEETING_UPDATED, status.getValue());
-            log.info(isNewTour ? "Crating tour succeeded" : "Updating tour succeeded");
+            eventManager.publish(isNewMeeting ? Event.MEETING_CREATED : Event.MEETING_UPDATED, status.getValue());
+            log.info(isNewMeeting ? "Crating Meeting succeeded" : "Updating Meeting succeeded");
         } else {
             status = MeetingUpdateStatus.FAILURE;
-            eventManager.publish(isNewTour ? Event.MEETING_CREATED_FAILED : Event.MEETING_UPDATED_FAILED, status.getValue());
-            log.warn(isNewTour ? "Crating tour failed" : "Updating tour failed");
+            eventManager.publish(isNewMeeting ? Event.MEETING_CREATED_FAILED : Event.MEETING_UPDATED_FAILED, status.getValue());
+            log.warn(isNewMeeting ? "Crating Meeting failed" : "Updating Meeting failed");
         }
 
         return invalidMeetingInput;
     }
 
     public List<InvalidMeetingInput> createMeeting() {
-        return manageTour(true);
+        return manageMeeting(true);
     }
 
-    public List<InvalidMeetingInput> updateTour() {
-        return manageTour(false);
+    public List<InvalidMeetingInput> updateMeeting() {
+        return manageMeeting(false);
     }
 }

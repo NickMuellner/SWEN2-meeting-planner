@@ -42,14 +42,14 @@ public class MeetingListView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.trace("Initialize TourListView");
+        log.trace("Initialize MeetingListView");
 
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), meetingStatus);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
         fadeOut.setOnFinished(event -> meetingStatus.setVisible(false));
 
-        viewModel.tours().bindBidirectional(meetingList.itemsProperty());
+        viewModel.meetings().bindBidirectional(meetingList.itemsProperty());
         deleteMeeting.visibleProperty().bindBidirectional(viewModel.deleteMeetingVisibleProperty());
         viewModel.meetingStatusVisibleProperty().bindBidirectional(meetingStatus.visibleProperty());
         viewModel.meetingStatusTextProperty().bindBidirectional(meetingStatus.textProperty());
@@ -57,22 +57,22 @@ public class MeetingListView implements Initializable {
         viewModel.meetingStatusOpacityProperty().bindBidirectional(meetingStatus.opacityProperty());
         viewModel.fadeTransitionProperty().setValue(fadeOut);
 
-        viewModel.selectedTour().addListener((obs, oldTour, newTour) -> {
-            if (newTour != null && !newTour.equals(meetingList.getSelectionModel().getSelectedItem())) {
-                meetingList.getSelectionModel().select(newTour);
+        viewModel.selectedMeeting().addListener((obs, oldMeeting, newMeeting) -> {
+            if (newMeeting != null && !newMeeting.equals(meetingList.getSelectionModel().getSelectedItem())) {
+                meetingList.getSelectionModel().select(newMeeting);
             }
         });
 
-        meetingList.getSelectionModel().selectedItemProperty().addListener((obs, oldTour, newTour) -> {
-            if (newTour != null && !newTour.equals(viewModel.selectedTour().getValue())) {
-                viewModel.selectedTour().setValue(newTour);
+        meetingList.getSelectionModel().selectedItemProperty().addListener((obs, oldMeeting, newMeeting) -> {
+            if (newMeeting != null && !newMeeting.equals(viewModel.selectedMeeting().getValue())) {
+                viewModel.selectedMeeting().setValue(newMeeting);
             }
         });
     }
 
     @FXML
     public void addMeeting() throws IOException {
-        log.trace("Adding tour");
+        log.trace("Adding Meeting");
         FXMLLoader loader = FXMLDependencyInjector.loader(
                 "meeting-manage-view.fxml",
                 Locale.ENGLISH
@@ -90,7 +90,7 @@ public class MeetingListView implements Initializable {
     public void deleteMeeting() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete this tour?");
+        alert.setHeaderText("Are you sure you want to delete this Meeting?");
         alert.setContentText("This action cannot be undone.");
 
         ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
@@ -100,10 +100,10 @@ public class MeetingListView implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
-            log.trace("Deleting tour");
-            viewModel.deleteTour();
+            log.trace("Deleting Meeting");
+            viewModel.deleteMeeting();
         } else {
-            log.trace("Tour deletion cancelled by user.");
+            log.trace("Meeting deletion cancelled by user.");
         }
     }
 }

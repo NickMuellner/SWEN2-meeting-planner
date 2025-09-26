@@ -27,7 +27,7 @@ public class App extends Application {
                 Locale.ENGLISH
         );
         Scene scene = new Scene(mainView);
-        stage.setTitle("Tour Planner");
+        stage.setTitle("Meeting Planner");
         stage.setScene(scene);
         stage.show();
         log.info("Loading complete");

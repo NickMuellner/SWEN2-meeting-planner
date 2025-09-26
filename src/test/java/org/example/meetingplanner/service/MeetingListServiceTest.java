@@ -30,7 +30,7 @@ class MeetingListServiceTest {
     @Test
     void testSelectAndDeselect() {
         Meeting meeting = service.getMeetings().get(0);
-        service.selectTour(meeting);
+        service.selectMeeting(meeting);
         assertEquals(meeting, service.getSelectedMeeting());
         service.deselectMeeting();
         assertNull(service.getSelectedMeeting());
@@ -51,7 +51,7 @@ class MeetingListServiceTest {
     @Test
     void testAddMeetingNoteAndUpdate() {
         Meeting meeting = service.getMeetings().get(0);
-        service.selectTour(meeting);
+        service.selectMeeting(meeting);
         MeetingNote log = new MeetingNote(LocalDate.now(), "c", 1, 2, 3, 4);
         service.addMeetingNote(log);
         assertTrue(meeting.getNotes().contains(log));

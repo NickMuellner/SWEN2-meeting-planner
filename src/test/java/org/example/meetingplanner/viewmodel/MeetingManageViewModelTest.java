@@ -59,10 +59,10 @@ class MeetingManageViewModelTest {
     }
 
     @Test
-    void updateTourUpdatesSelectedTour() {
+    void updateTourUpdatesSelectedMeeting() {
         Meeting existing = new Meeting("Old", "old", "x", "y", "WALKING", "10", "1h", "info", false);
         repo.savedMeetings.add(existing);
-        meetingListService.selectTour(existing);
+        meetingListService.selectMeeting(existing);
 
         viewModel.titleProperty().set("NewName");
         viewModel.agendaProperty().set("Desc");
@@ -73,7 +73,7 @@ class MeetingManageViewModelTest {
         viewModel.timeProperty().set("2h");
         viewModel.informationProperty().set("new info");
 
-        List<InvalidMeetingInput> invalid = viewModel.updateTour();
+        List<InvalidMeetingInput> invalid = viewModel.updateMeeting();
 
         assertTrue(invalid.isEmpty());
         assertEquals("NewName", existing.getTitle());

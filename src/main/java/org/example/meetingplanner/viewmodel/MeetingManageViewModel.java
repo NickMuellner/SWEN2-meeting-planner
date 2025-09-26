@@ -47,8 +47,8 @@ public class MeetingManageViewModel {
         log.debug("Loading meeting details");
         title.setValue(meetingListService.getSelectedMeeting().getTitle());
         fromDate.setValue(meetingListService.getSelectedMeeting().getFrom().toLocalDate());
-        toDate.setValue(meetingListService.getSelectedMeeting().getFrom().toLocalDate());
-        fromTime.setValue(meetingListService.getSelectedMeeting().getTo().toLocalTime());
+        toDate.setValue(meetingListService.getSelectedMeeting().getTo().toLocalDate());
+        fromTime.setValue(meetingListService.getSelectedMeeting().getFrom().toLocalTime());
         toTime.setValue(meetingListService.getSelectedMeeting().getTo().toLocalTime());
         agenda.setValue(meetingListService.getSelectedMeeting().getAgenda());
         notes.setAll(meetingListService.getSelectedMeeting().getNotes());

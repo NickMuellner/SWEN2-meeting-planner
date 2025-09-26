@@ -47,20 +47,8 @@ public class ViewFactory {
             return new MenuView(new MenuViewModel(eventManager, meetingListService));
         }
 
-        if (MeetingDetailView.class == viewClass) {
-            return new MeetingDetailView(new MeetingDetailViewModel(eventManager, meetingListService));
-        }
-
-        if (MeetingNotesView.class == viewClass) {
-            return new MeetingNotesView(new MeetingNotesViewModel(eventManager, meetingListService));
-        }
-
-        if (MeetingCreateView.class == viewClass) {
-            return new MeetingCreateView(new MeetingCreateViewModel(eventManager, meetingListService));
-        }
-
-        if (MeetingNoteCreateView.class == viewClass) {
-            return new MeetingNoteCreateView(new MeetingNoteCreateViewModel(eventManager, meetingListService));
+        if (MeetingManageView.class == viewClass) {
+            return new MeetingManageView(new MeetingManageViewModel(eventManager, meetingListService));
         }
 
         throw new IllegalArgumentException(

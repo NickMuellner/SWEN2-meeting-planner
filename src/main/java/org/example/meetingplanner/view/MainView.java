@@ -1,7 +1,9 @@
 package org.example.meetingplanner.view;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +20,9 @@ public class MainView implements Initializable {
     @FXML
     private TextField searchInput;
 
+    @FXML
+    private Node meetingDetails;
+
     public MainView(MainViewModel viewModel) {
         this.viewModel = viewModel;
     }
@@ -26,8 +31,8 @@ public class MainView implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.trace("Initialize MainView");
 
-        searchInput.textProperty()
-                .bindBidirectional(viewModel.searchTextProperty());
+        searchInput.textProperty().bindBidirectional(viewModel.searchTextProperty());
+        meetingDetails.visibleProperty().bindBidirectional(viewModel.meetingManageViewVisibleProperty());
     }
 
     @FXML

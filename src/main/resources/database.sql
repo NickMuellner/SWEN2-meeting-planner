@@ -2,8 +2,8 @@ CREATE TABLE meeting
 (
     id                SERIAL PRIMARY KEY,
     title             TEXT NOT NULL,
-    "from"            TEXT,
-    "to"              TEXT,
+    from_datetime     TIMESTAMP,
+    to_datetime       TIMESTAMP,
     agenda            TEXT
 );
 

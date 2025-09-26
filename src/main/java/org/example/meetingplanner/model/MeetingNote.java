@@ -30,7 +30,7 @@ public class MeetingNote {
     @JsonCreator
     public MeetingNote(
             @JsonProperty("id") int id,
-            @JsonProperty("comment") String note
+            @JsonProperty("note") String note
     ) {
         this(note);
         this.id = id;
@@ -58,5 +58,10 @@ public class MeetingNote {
     
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
+    }
+
+    @Override
+    public String toString() {
+        return note;
     }
 }

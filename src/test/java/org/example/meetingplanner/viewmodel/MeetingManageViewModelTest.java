@@ -15,9 +15,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class MeetingCreateViewModelTest {
+class MeetingManageViewModelTest {
 
-    private MeetingCreateViewModel viewModel;
+    private MeetingManageViewModel viewModel;
     private InMemoryRepo repo;
     private EventManager eventManager;
     private MeetingListService meetingListService;
@@ -27,12 +27,12 @@ class MeetingCreateViewModelTest {
         eventManager = new EventManager();
         repo = new InMemoryRepo();
         meetingListService = new MeetingListService(eventManager, repo);
-        viewModel = new MeetingCreateViewModel(eventManager, meetingListService);
+        viewModel = new MeetingManageViewModel(eventManager, meetingListService);
     }
 
     @Test
-    void createTourMissingFields() {
-        List<InvalidMeetingInput> invalidInputs = viewModel.createTour();
+    void createMeetingMissingFields() {
+        List<InvalidMeetingInput> invalidInputs = viewModel.createMeeting();
 
         assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_NAME));
         assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_FROM));
@@ -41,17 +41,17 @@ class MeetingCreateViewModelTest {
     }
 
     @Test
-    void createTourSuccessAddsTour() {
-        viewModel.nameProperty().set("Test");
-        viewModel.descriptionProperty().set("desc");
+    void createTourSuccessAddsMeeting() {
+        viewModel.titleProperty().set("Test");
+        viewModel.agendaProperty().set("desc");
         viewModel.fromProperty().set("a");
         viewModel.toProperty().set("b");
-        viewModel.typeProperty().set("WALKING");
+        viewModel.agendaProperty().set("WALKING");
         viewModel.distanceProperty().set("1");
         viewModel.timeProperty().set("1h");
         viewModel.informationProperty().set("info");
 
-        List<InvalidMeetingInput> invalid = viewModel.createTour();
+        List<InvalidMeetingInput> invalid = viewModel.createMeeting();
 
         assertTrue(invalid.isEmpty());
         assertEquals(1, repo.savedMeetings.size());
@@ -64,11 +64,11 @@ class MeetingCreateViewModelTest {
         repo.savedMeetings.add(existing);
         meetingListService.selectTour(existing);
 
-        viewModel.nameProperty().set("NewName");
-        viewModel.descriptionProperty().set("Desc");
+        viewModel.titleProperty().set("NewName");
+        viewModel.agendaProperty().set("Desc");
         viewModel.fromProperty().set("X");
         viewModel.toProperty().set("Y");
-        viewModel.typeProperty().set("CAR");
+        viewModel.agendaProperty().set("CAR");
         viewModel.distanceProperty().set("20");
         viewModel.timeProperty().set("2h");
         viewModel.informationProperty().set("new info");

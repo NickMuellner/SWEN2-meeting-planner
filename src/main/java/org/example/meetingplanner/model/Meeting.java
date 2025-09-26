@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import org.example.meetingplanner.util.LocalDateDeserializer;
-import org.example.meetingplanner.util.LocalDateSerializer;
+import org.example.meetingplanner.util.LocalDateTimeDeserializer;
+import org.example.meetingplanner.util.LocalDateTimeSerializer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +29,15 @@ public class Meeting {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "from")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate from;
+    @Column(name = "from_datetime")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime from;
 
-    @Column(name = "to")
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate to;
+    @Column(name = "to_datetime")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime to;
 
     @Column(name = "agenda")
     private String agenda;
@@ -46,8 +47,8 @@ public class Meeting {
     
     public Meeting(
             String title,
-            LocalDate from,
-            LocalDate to,
+            LocalDateTime from,
+            LocalDateTime to,
             String agenda
     ) {
         this.title = title;
@@ -61,8 +62,8 @@ public class Meeting {
             @JsonProperty("notes") List<MeetingNote> notes,
             @JsonProperty("id") int id,
             @JsonProperty("title") String title,
-            @JsonProperty("from") LocalDate from,
-            @JsonProperty("to") LocalDate to,
+            @JsonProperty("from_datetime") LocalDateTime from,
+            @JsonProperty("to_datetime") LocalDateTime to,
             @JsonProperty("agenda") String agenda
     ) {
         this(title, from, to, agenda);
@@ -82,11 +83,11 @@ public class Meeting {
         return title == null ? "" : title;
     }
 
-    public LocalDate getFrom() {
+    public LocalDateTime getFrom() {
         return from;
     }
 
-    public LocalDate getTo() {
+    public LocalDateTime getTo() {
         return to;
     }
 
@@ -94,15 +95,16 @@ public class Meeting {
         return agenda == null ? "" : agenda;
     }
 
-    public void updateMeeting(String title, LocalDate from, LocalDate to, String agenda) {
+    public void updateMeeting(String title, LocalDateTime from, LocalDateTime to, String agenda) {
         this.title = title;
         this.from = from;
         this.to = to;
         this.agenda = agenda;
     }
 
-    public void addToNotes(MeetingNote note) {
-        this.notes.add(note);
+    public void updateNotes(List<MeetingNote> notes) {
+        this.notes.clear();
+        this.notes.addAll(notes);
     }
 
     public void removeFromNotes(MeetingNote note) {

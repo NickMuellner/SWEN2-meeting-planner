@@ -14,6 +14,7 @@ module org.example.meetingplanner {
     requires javafx.swing;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
+    requires javafx.base;
 
 
     opens org.example.meetingplanner.viewmodel to javafx.fxml;

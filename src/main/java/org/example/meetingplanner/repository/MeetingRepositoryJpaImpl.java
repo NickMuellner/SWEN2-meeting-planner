@@ -26,7 +26,7 @@ public class MeetingRepositoryJpaImpl implements MeetingRepository {
             Root<Meeting> root = cq.from(Meeting.class);
 
             // Use LEFT JOIN FETCH to eagerly load tour logs
-            root.fetch("meeting_notes", JoinType.LEFT);
+            root.fetch("notes", JoinType.LEFT);
 
             // Add DISTINCT to avoid duplicate Tour entities due to JOIN
             cq.select(root).distinct(true);

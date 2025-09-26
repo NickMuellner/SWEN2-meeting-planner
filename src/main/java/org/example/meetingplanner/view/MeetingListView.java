@@ -1,7 +1,6 @@
 package org.example.meetingplanner.view;
 
 import javafx.animation.FadeTransition;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,16 +28,13 @@ public class MeetingListView implements Initializable {
     private final MeetingListViewModel viewModel;
 
     @FXML
-    private ListView<Meeting> tourList;
+    private ListView<Meeting> meetingList;
 
     @FXML
-    private Button deleteTour;
+    private Button deleteMeeting;
 
     @FXML
-    private ToggleButton favoriteToggle;
-
-    @FXML
-    private Label tourStatus;
+    private Label meetingStatus;
 
     public MeetingListView(MeetingListViewModel viewModel) {
         this.viewModel = viewModel;
@@ -48,30 +44,26 @@ public class MeetingListView implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.trace("Initialize TourListView");
 
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), tourStatus);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), meetingStatus);
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> tourStatus.setVisible(false));
+        fadeOut.setOnFinished(event -> meetingStatus.setVisible(false));
 
-        viewModel.tours().bindBidirectional(tourList.itemsProperty());
-        deleteTour.visibleProperty().bindBidirectional(viewModel.deleteTourVisibleProperty());
-        viewModel.tourStatusVisibleProperty().bindBidirectional(tourStatus.visibleProperty());
-        viewModel.tourStatusTextProperty().bindBidirectional(tourStatus.textProperty());
-        tourStatus.textFillProperty().bind(viewModel.tourStatusColorProperty());
-        viewModel.tourStatusOpacityProperty().bindBidirectional(tourStatus.opacityProperty());
+        viewModel.tours().bindBidirectional(meetingList.itemsProperty());
+        deleteMeeting.visibleProperty().bindBidirectional(viewModel.deleteMeetingVisibleProperty());
+        viewModel.meetingStatusVisibleProperty().bindBidirectional(meetingStatus.visibleProperty());
+        viewModel.meetingStatusTextProperty().bindBidirectional(meetingStatus.textProperty());
+        meetingStatus.textFillProperty().bind(viewModel.meetingStatusColorProperty());
+        viewModel.meetingStatusOpacityProperty().bindBidirectional(meetingStatus.opacityProperty());
         viewModel.fadeTransitionProperty().setValue(fadeOut);
-        favoriteToggle.selectedProperty().bindBidirectional(viewModel.favoriteProperty());
-        favoriteToggle.textProperty().bind(Bindings.createStringBinding(
-                () -> favoriteToggle.isSelected() ? "★" : "☆",
-                favoriteToggle.selectedProperty()));
 
         viewModel.selectedTour().addListener((obs, oldTour, newTour) -> {
-            if (newTour != null && !newTour.equals(tourList.getSelectionModel().getSelectedItem())) {
-                tourList.getSelectionModel().select(newTour);
+            if (newTour != null && !newTour.equals(meetingList.getSelectionModel().getSelectedItem())) {
+                meetingList.getSelectionModel().select(newTour);
             }
         });
 
-        tourList.getSelectionModel().selectedItemProperty().addListener((obs, oldTour, newTour) -> {
+        meetingList.getSelectionModel().selectedItemProperty().addListener((obs, oldTour, newTour) -> {
             if (newTour != null && !newTour.equals(viewModel.selectedTour().getValue())) {
                 viewModel.selectedTour().setValue(newTour);
             }
@@ -79,14 +71,14 @@ public class MeetingListView implements Initializable {
     }
 
     @FXML
-    public void addTour() throws IOException {
+    public void addMeeting() throws IOException {
         log.trace("Adding tour");
         FXMLLoader loader = FXMLDependencyInjector.loader(
-                "meeting-create-view.fxml",
+                "meeting-manage-view.fxml",
                 Locale.ENGLISH
         );
         Parent root = loader.load();
-        MeetingCreateView controller = loader.getController();
+        MeetingManageView controller = loader.getController();
         controller.setPopupMode(true);
         Stage popupStage = new Stage();
         popupStage.setScene(new Scene(root));
@@ -95,7 +87,7 @@ public class MeetingListView implements Initializable {
     }
 
     @FXML
-    public void deleteTour() {
+    public void deleteMeeting() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Deletion");
         alert.setHeaderText("Are you sure you want to delete this tour?");
@@ -113,11 +105,5 @@ public class MeetingListView implements Initializable {
         } else {
             log.trace("Tour deletion cancelled by user.");
         }
-    }
-
-    @FXML
-    private void toggleFavorite() {
-        log.trace("Toggling favorite");
-        viewModel.toggleFavorite();
     }
 }

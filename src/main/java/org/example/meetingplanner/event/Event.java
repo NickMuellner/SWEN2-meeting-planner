@@ -2,6 +2,7 @@ package org.example.meetingplanner.event;
 
 public enum Event {
     MEETING_SELECTED,
+    MEETING_DESELECTED,
     MEETING_CREATED,
     MEETING_CREATED_FAILED,
     MEETING_UPDATED,

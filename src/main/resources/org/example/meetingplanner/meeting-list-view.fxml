@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxWidth="500.0" spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12"
-      fx:controller="org.example.meetingplanner.view.MeetingListView">
+
+<VBox maxWidth="500.0" spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.meetingplanner.view.MeetingListView">
     <children>
         <HBox alignment="CENTER">
             <children>
-                <HBox spacing="5.0">
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#addTour" text="+"/>
-                        <Button fx:id="deleteTour" mnemonicParsing="false" onAction="#deleteTour" text="-"/>
-                        <ToggleButton fx:id="favoriteToggle" mnemonicParsing="false" onAction="#toggleFavorite"
-                                      text="☆"/>
+                  <Label text="Meetings" />
+                        <Button mnemonicParsing="false" onAction="#addMeeting" text="+" />
+                        <Button fx:id="deleteMeeting" mnemonicParsing="false" onAction="#deleteMeeting" text="-" />
                     </children>
                 </HBox>
-                <HBox HBox.hgrow="ALWAYS"/>
-                <Label fx:id="tourStatus" text="Label" visible="false">
+                <HBox HBox.hgrow="ALWAYS" />
+                <Label fx:id="meetingStatus" text="Label" visible="false">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </Label>
             </children>
         </HBox>
-        <ListView fx:id="tourList" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <ListView fx:id="meetingList" minWidth="150.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <placeholder>
-                <Label text="No Tours"/>
+                <Label text="No Tours" />
             </placeholder>
         </ListView>
     </children>

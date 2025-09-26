@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<ScrollPane xmlns:fx="http://javafx.com/fxml/1" fitToHeight="true" fitToWidth="true"
-            xmlns="http://javafx.com/javafx/17.0.12" fx:controller="org.example.meetingplanner.view.MainView">
+
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.meetingplanner.view.MainView">
     <content>
         <VBox>
-            <fx:include source="menu-view.fxml"/>
+            <fx:include source="menu-view.fxml" />
             <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
                 <children>
-                    <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12">
+                    <VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
                         <children>
-                            <Label text="Search"/>
+                            <Label text="Search" />
                             <HBox>
                                 <children>
-                                    <TextField fx:id="searchInput" onKeyTyped="#onSearch" HBox.hgrow="ALWAYS"/>
+                                    <TextField fx:id="searchInput" onKeyTyped="#onSearch" HBox.hgrow="ALWAYS" />
                                 </children>
                             </HBox>
                         </children>
                     </VBox>
                     <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                         <children>
-                            <fx:include source="meeting-list-view.fxml" HBox.hgrow="ALWAYS"/>
-                            <fx:include source="meeting-detail-view.fxml" HBox.hgrow="ALWAYS"/>
+                            <fx:include source="meeting-list-view.fxml" HBox.hgrow="ALWAYS" />
+                            <fx:include fx:id="meetingDetails" source="meeting-manage-view.fxml" visible="false" HBox.hgrow="ALWAYS" />
                         </children>
                     </HBox>
                 </children>
                 <padding>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </padding>
             </VBox>
         </VBox>

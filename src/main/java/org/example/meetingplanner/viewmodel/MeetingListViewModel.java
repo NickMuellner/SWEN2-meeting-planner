@@ -18,50 +18,40 @@ public class MeetingListViewModel {
 
     private final MeetingListService meetingListService;
 
-    private final Property<ObservableList<Meeting>> tours = new SimpleListProperty<>(FXCollections.observableArrayList());
-    private final Property<Meeting> selectedTour = new SimpleObjectProperty<>();
-    private final BooleanProperty favoriteProperty = new SimpleBooleanProperty();
+    private final Property<ObservableList<Meeting>> meetings = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final Property<Meeting> selectedMeeting = new SimpleObjectProperty<>();
 
-    private final BooleanProperty deleteTourVisible = new SimpleBooleanProperty();
+    private final BooleanProperty deleteMeetingVisible = new SimpleBooleanProperty();
 
-    private final BooleanProperty tourStatusVisibleProperty = new SimpleBooleanProperty();
-    private final StringProperty tourStatusTextProperty = new SimpleStringProperty();
-    private final Property<Color> tourStatusColorProperty = new SimpleObjectProperty<>();
-    private final DoubleProperty tourStatusOpacityProperty = new SimpleDoubleProperty();
+    private final BooleanProperty meetingStatusVisibleProperty = new SimpleBooleanProperty();
+    private final StringProperty meetingStatusTextProperty = new SimpleStringProperty();
+    private final Property<Color> meetingStatusColorProperty = new SimpleObjectProperty<>();
+    private final DoubleProperty meetingStatusOpacityProperty = new SimpleDoubleProperty();
 
-    private final PauseTransition tourStatusPauseTransition = new PauseTransition(Duration.seconds(2));
+    private final PauseTransition meetingStatusPauseTransition = new PauseTransition(Duration.seconds(2));
     private final Property<FadeTransition> fadeTransitionProperty = new SimpleObjectProperty<>();
 
     public MeetingListViewModel(EventManager eventManager, MeetingListService meetingListService) {
         this.meetingListService = meetingListService;
 
-        tourStatusPauseTransition.setOnFinished(event -> fadeTransitionProperty.getValue().play());
+        meetingStatusPauseTransition.setOnFinished(event -> fadeTransitionProperty.getValue().play());
 
-        selectedTour.addListener((obs, oldValue, newValue) -> {
+        selectedMeeting.addListener((obs, oldValue, newValue) -> {
             meetingListService.selectTour(newValue);
-            deleteTourVisible.setValue(newValue != null);
+            deleteMeetingVisible.setValue(newValue != null);
         });
         eventManager.subscribe(Event.MEETING_UPDATED, this::onTourUpdated);
         eventManager.subscribe(Event.MEETING_CREATED, this::onTourUpdated);
-        eventManager.subscribe(Event.MEETING_CREATED, this::selectTour);
+        eventManager.subscribe(Event.MEETING_CREATED, this::selectMeeting);
         eventManager.subscribe(Event.MEETING_UPDATED_FAILED, this::onTourUpdatedFailed);
         eventManager.subscribe(Event.SEARCH_STARTED, this::search);
 
-        Platform.runLater(() -> tours.getValue().setAll(meetingListService.getMeetings()));
-    }
-
-    private void exportCompleted(Object s) {
-        displayStatus(MeetingUpdateStatus.SUCCESS);
-    }
-
-    private void importCompleted(Object s) {
-        displayStatus(MeetingUpdateStatus.SUCCESS);
-        tours.getValue().setAll(meetingListService.getMeetings());
+        Platform.runLater(() -> meetings.getValue().setAll(meetingListService.getMeetings()));
     }
 
     private void onTourUpdated(Object s) {
         String status = (String) s;
-        tours.getValue().setAll(meetingListService.getMeetings());
+        meetings.getValue().setAll(meetingListService.getMeetings());
         displayStatus(MeetingUpdateStatus.valueOf(status.toUpperCase()));
     }
 
@@ -72,7 +62,7 @@ public class MeetingListViewModel {
 
     private void search(Object s) {
         String search = (String) s;
-        tours.getValue().setAll(meetingListService.getMeetings().stream().filter(
+        meetings.getValue().setAll(meetingListService.getMeetings().stream().filter(
                 e -> e.getTitle().contains(search) ||
                         e.getFrom().toString().contains(search) ||
                         e.getTo().toString().contains(search) ||
@@ -81,70 +71,62 @@ public class MeetingListViewModel {
                                 l -> l.getNote().contains(search)
                         )
         ).toList());
-        if (!tours.getValue().contains(meetingListService.getSelectedMeeting()) && meetingListService.getSelectedMeeting() != null) {
+        if (!meetings.getValue().contains(meetingListService.getSelectedMeeting()) && meetingListService.getSelectedMeeting() != null) {
+            selectedMeeting.setValue(null);
             meetingListService.deselectMeeting();
         }
         displayStatus(MeetingUpdateStatus.SEARCHED);
     }
 
     public Property<ObservableList<Meeting>> tours() {
-        return tours;
+        return meetings;
     }
 
     public Property<Meeting> selectedTour() {
-        return selectedTour;
+        return selectedMeeting;
     }
 
     public void deleteTour() {
-        meetingListService.removeMeeting(selectedTour.getValue());
-        tours.getValue().setAll(meetingListService.getMeetings());
+        meetingListService.removeMeeting(selectedMeeting.getValue());
+        meetings.getValue().setAll(meetingListService.getMeetings());
         displayStatus(MeetingUpdateStatus.SUCCESS);
     }
 
-    private void selectTour(Object s) {
-        selectedTour.setValue(meetingListService.getSelectedMeeting());
+    private void selectMeeting(Object s) {
+        selectedMeeting.setValue(meetingListService.getSelectedMeeting());
     }
 
-    public BooleanProperty deleteTourVisibleProperty() {
-        return deleteTourVisible;
+    public BooleanProperty deleteMeetingVisibleProperty() {
+        return deleteMeetingVisible;
     }
 
-    public BooleanProperty tourStatusVisibleProperty() {
-        return tourStatusVisibleProperty;
+    public BooleanProperty meetingStatusVisibleProperty() {
+        return meetingStatusVisibleProperty;
     }
 
-    public Property<String> tourStatusTextProperty() {
-        return tourStatusTextProperty;
+    public Property<String> meetingStatusTextProperty() {
+        return meetingStatusTextProperty;
     }
 
-    public Property<Color> tourStatusColorProperty() {
-        return tourStatusColorProperty;
+    public Property<Color> meetingStatusColorProperty() {
+        return meetingStatusColorProperty;
     }
 
     private void displayStatus(MeetingUpdateStatus status) {
-        tourStatusPauseTransition.stop();
+        meetingStatusPauseTransition.stop();
         fadeTransitionProperty.getValue().stop();
-        tourStatusColorProperty.setValue(status.getColor());
-        tourStatusTextProperty.setValue(status.getValue());
-        tourStatusVisibleProperty.setValue(true);
-        tourStatusOpacityProperty.setValue(1);
-        tourStatusPauseTransition.play();
+        meetingStatusColorProperty.setValue(status.getColor());
+        meetingStatusTextProperty.setValue(status.getValue());
+        meetingStatusVisibleProperty.setValue(true);
+        meetingStatusOpacityProperty.setValue(1);
+        meetingStatusPauseTransition.play();
     }
 
     public Property<FadeTransition> fadeTransitionProperty() {
         return fadeTransitionProperty;
     }
 
-    public DoubleProperty tourStatusOpacityProperty() {
-        return tourStatusOpacityProperty;
-    }
-
-    public BooleanProperty favoriteProperty() {
-        return favoriteProperty;
-    }
-
-    public void toggleFavorite() {
-        boolean fav = !favoriteProperty.get();
-        favoriteProperty.set(fav);
+    public DoubleProperty meetingStatusOpacityProperty() {
+        return meetingStatusOpacityProperty;
     }
 }

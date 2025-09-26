@@ -7,7 +7,9 @@ import org.example.meetingplanner.model.MeetingNote;
 import org.example.meetingplanner.repository.MeetingRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MeetingListService {
     private final EventManager eventManager;
@@ -36,7 +38,7 @@ public class MeetingListService {
 
     public void deselectMeeting() {
         selectedMeeting = null;
-        eventManager.publish(Event.MEETING_SELECTED, "");
+        eventManager.publish(Event.MEETING_DESELECTED, "");
     }
 
     public void addMeeting(Meeting meeting) {
@@ -45,10 +47,9 @@ public class MeetingListService {
         selectedMeeting = meeting;
     }
 
-    public void addMeetingNote(MeetingNote meetingNote) {
-        meetingNote.setMeeting(selectedMeeting);
-        selectedMeeting.addToNotes(meetingNote);
-        meetingRepository.saveMeetingNote(meetingNote);
+    public void updateMeeting(String title, LocalDateTime from, LocalDateTime to, String agenda) {
+        selectedMeeting.updateMeeting(title, from, to, agenda);
+        meetingRepository.save(selectedMeeting);
     }
 
     public void removeMeeting(Meeting meeting) {
@@ -57,17 +58,16 @@ public class MeetingListService {
         deselectMeeting();
     }
 
-    public void updateMeeting(String title, LocalDate from, LocalDate to, String agenda) {
-        selectedMeeting.updateMeeting(title, from, to, agenda);
-        meetingRepository.save(selectedMeeting);
+    public void updateMeetingNotes(List<MeetingNote> meetingNotes) {
+        for (MeetingNote meetingNote : meetingNotes) {
+            meetingNote.setMeeting(selectedMeeting);
+            meetingRepository.saveMeetingNote(meetingNote);
+        }
+        selectedMeeting.updateNotes(meetingNotes);
     }
 
     public void removeMeetingNote(MeetingNote meetingNote) {
         selectedMeeting.removeFromNotes(meetingNote);
         meetingRepository.deleteMeetingNote(meetingNote);
-    }
-
-    public void updateMeetingNote(MeetingNote note) {
-        meetingRepository.saveMeetingNote(note);
     }
 }

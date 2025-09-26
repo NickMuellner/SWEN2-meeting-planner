@@ -1,0 +1,70 @@
+package org.example.meetingplanner;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.example.meetingplanner.event.EventManager;
+import org.example.meetingplanner.repository.MeetingRepository;
+import org.example.meetingplanner.repository.MeetingRepositoryJpaImpl;
+import org.example.meetingplanner.service.MeetingListService;
+import org.example.meetingplanner.view.*;
+import org.example.meetingplanner.viewmodel.*;
+
+public class ViewFactory {
+
+    private static final Logger log = LogManager.getLogger(ViewFactory.class);
+    private static ViewFactory instance;
+
+    private final MeetingListService meetingListService;
+    private final EventManager eventManager;
+
+    private ViewFactory(MeetingListService meetingListService, EventManager eventManager) {
+        this.meetingListService = meetingListService;
+        this.eventManager = eventManager;
+    }
+
+    public static ViewFactory getInstance() {
+        if (null == instance) {
+            EventManager eventManager = new EventManager();
+            MeetingRepository meetingRepository = new MeetingRepositoryJpaImpl();
+            instance = new ViewFactory(new MeetingListService(eventManager, meetingRepository), eventManager);
+        }
+
+        return instance;
+    }
+
+    public Object create(Class<?> viewClass) {
+        log.debug("Creating View: {}", viewClass.getName());
+
+        if (MainView.class == viewClass) {
+            return new MainView(new MainViewModel(eventManager));
+        }
+
+        if (MeetingListView.class == viewClass) {
+            return new MeetingListView(new MeetingListViewModel(eventManager, meetingListService));
+        }
+
+        if (MenuView.class == viewClass) {
+            return new MenuView(new MenuViewModel(eventManager, meetingListService));
+        }
+
+        if (MeetingDetailView.class == viewClass) {
+            return new MeetingDetailView(new MeetingDetailViewModel(eventManager, meetingListService));
+        }
+
+        if (MeetingNotesView.class == viewClass) {
+            return new MeetingNotesView(new MeetingNotesViewModel(eventManager, meetingListService));
+        }
+
+        if (MeetingCreateView.class == viewClass) {
+            return new MeetingCreateView(new MeetingCreateViewModel(eventManager, meetingListService));
+        }
+
+        if (MeetingNoteCreateView.class == viewClass) {
+            return new MeetingNoteCreateView(new MeetingNoteCreateViewModel(eventManager, meetingListService));
+        }
+
+        throw new IllegalArgumentException(
+                "Unknown view class: " + viewClass
+        );
+    }
+}

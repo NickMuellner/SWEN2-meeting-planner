@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<MenuBar xmlns:fx="http://javafx.com/fxml/1" fx:id="menuBar" xmlns="http://javafx.com/javafx/17.0.12"
+         fx:controller="org.example.meetingplanner.view.MenuView">
+    <menus>
+        <Menu mnemonicParsing="false" text="File">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#exportFile" text="Export"/>
+                <MenuItem mnemonicParsing="false" onAction="#importFile" text="Import"/>
+            </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Report">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#tourReport" text="Tour Report"/>
+                <MenuItem mnemonicParsing="false" onAction="#summarizeReport" text="Summarize Report"/>
+            </items>
+        </Menu>
+    </menus>
+</MenuBar>

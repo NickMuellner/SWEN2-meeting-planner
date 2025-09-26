@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.12"
+      fx:controller="org.example.meetingplanner.view.MeetingCreateView">
+    <children>
+        <HBox alignment="TOP_CENTER" spacing="60.0">
+            <children>
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <VBox>
+                            <children>
+                                <Label text="Name"/>
+                                <TextField fx:id="name"/>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="From"/>
+                                <TextField fx:id="from"/>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="Transport type"/>
+                                <ComboBox fx:id="type" prefWidth="150.0">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Car"/>
+                                            <String fx:value="Foot"/>
+                                            <String fx:value="Bike"/>
+                                        </FXCollections>
+                                    </items>
+                                    <value>
+                                        <String fx:value="Car"/>
+                                    </value>
+                                </ComboBox>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="Route information"/>
+                                <TextField fx:id="information"/>
+                            </children>
+                        </VBox>
+                        <Button mnemonicParsing="false" onAction="#saveTour" text="Save"/>
+                    </children>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </VBox>
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <VBox>
+                            <children>
+                                <Label text="Tour description"/>
+                                <TextField fx:id="description"/>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="To"/>
+                                <TextField fx:id="to"/>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="Tour distance"/>
+                                <TextField fx:id="distance" editable="false"/>
+                            </children>
+                        </VBox>
+                        <VBox>
+                            <children>
+                                <Label text="Estimated time"/>
+                                <TextField fx:id="time" editable="false"/>
+                            </children>
+                        </VBox>
+                        <CheckBox fx:id="favorite" text="Favorite"/>
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+</VBox>

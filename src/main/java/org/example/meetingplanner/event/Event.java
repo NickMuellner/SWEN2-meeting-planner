@@ -1,0 +1,11 @@
+package org.example.meetingplanner.event;
+
+public enum Event {
+    MEETING_SELECTED,
+    MEETING_CREATED,
+    MEETING_CREATED_FAILED,
+    MEETING_UPDATED,
+    MEETING_UPDATED_FAILED,
+    SEARCH_STARTED,
+    MEETING_NOTE_CREATED
+}

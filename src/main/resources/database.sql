@@ -1,10 +1,10 @@
 CREATE TABLE meeting
 (
-    id                SERIAL PRIMARY KEY,
-    title             TEXT NOT NULL,
-    from_datetime     TIMESTAMP,
-    to_datetime       TIMESTAMP,
-    agenda            TEXT
+    id            SERIAL PRIMARY KEY,
+    title         TEXT NOT NULL,
+    from_datetime TIMESTAMP,
+    to_datetime   TIMESTAMP,
+    agenda        TEXT
 );
 
 CREATE TABLE meeting_note

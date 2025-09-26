@@ -41,22 +41,6 @@ public class MeetingRepositoryJpaImpl implements MeetingRepository {
     }
 
     @Override
-    public Meeting findById(int id) {
-        log.debug("Finding meeting by id: {}", id);
-        try (EntityManager em = JpaManager.getEntityManager()) {
-            Meeting meeting = em.find(Meeting.class, id);
-            if (meeting != null) {
-                // Initialize the logs collection
-                meeting.getNotes().size();
-            }
-            return meeting;
-        } catch (Exception e) {
-            log.error("Error finding meeting by id: {}", id, e);
-            throw new RuntimeException("Failed to find meeting by id", e);
-        }
-    }
-
-    @Override
     public void save(Meeting meeting) {
         log.debug("Saving meeting: {}", meeting.getTitle());
         EntityManager em = JpaManager.getEntityManager();

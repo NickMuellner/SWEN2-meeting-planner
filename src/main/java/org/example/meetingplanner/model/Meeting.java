@@ -1,15 +1,14 @@
 package org.example.meetingplanner.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import org.example.meetingplanner.util.LocalDateTimeDeserializer;
 import org.example.meetingplanner.util.LocalDateTimeSerializer;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class Meeting {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private final List<MeetingNote> notes = new ArrayList<>();
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -44,7 +43,7 @@ public class Meeting {
 
     public Meeting() {
     }
-    
+
     public Meeting(
             String title,
             LocalDateTime from,

@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 public class JpaManager {
     private static final Logger log = LogManager.getLogger(JpaManager.class);
     private static final EntityManagerFactory entityManagerFactory;
-    
+
     static {
         try {
             log.info("Initializing JPA EntityManagerFactory");
@@ -20,11 +20,11 @@ public class JpaManager {
             throw new RuntimeException("Failed to initialize JPA", e);
         }
     }
-    
+
     public static EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
-    
+
     public static void close() {
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
             log.info("Closing JPA EntityManagerFactory");

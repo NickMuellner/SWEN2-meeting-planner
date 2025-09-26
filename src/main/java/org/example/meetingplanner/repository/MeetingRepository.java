@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface MeetingRepository {
     List<Meeting> findAll();
-    
-    Meeting findById(int id);
 
     void save(Meeting meeting);
 

@@ -54,37 +54,8 @@ public class MeetingManageView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.trace("Initialize MeetingManageView");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        SpinnerValueFactory<LocalTime> fromTimeFactory = new SpinnerValueFactory<LocalTime>() {
-            {
-                setConverter(new LocalTimeStringConverter(formatter, null));
-            }
-
-            @Override
-            public void decrement(int steps) {
-                setValue(getValue().minusMinutes(steps));
-            }
-
-            @Override
-            public void increment(int steps) {
-                setValue(getValue().plusMinutes(steps));
-            }
-        };
-        SpinnerValueFactory<LocalTime> toTimeFactory = new SpinnerValueFactory<LocalTime>() {
-            {
-                setConverter(new LocalTimeStringConverter(formatter, null));
-            }
-
-            @Override
-            public void decrement(int steps) {
-                setValue(getValue().minusMinutes(steps));
-            }
-
-            @Override
-            public void increment(int steps) {
-                setValue(getValue().plusMinutes(steps));
-            }
-        };
+        SpinnerValueFactory<LocalTime> fromTimeFactory = createSpinnerValueFactory();
+        SpinnerValueFactory<LocalTime> toTimeFactory = createSpinnerValueFactory();
 
         fromTime.setValueFactory(fromTimeFactory);
         toTime.setValueFactory(toTimeFactory);
@@ -163,7 +134,7 @@ public class MeetingManageView implements Initializable {
 
     @FXML
     private void addNote() {
-        if(newNote.getText().trim().isEmpty()) {
+        if (newNote.getText().trim().isEmpty()) {
             newNote.setStyle("-fx-border-color: red; -fx-border-width: 1;");
             PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
             pause.setOnFinished(e -> newNote.setStyle(""));
@@ -177,5 +148,24 @@ public class MeetingManageView implements Initializable {
     @FXML
     private void deleteNote() {
         notes.getItems().remove(notes.getSelectionModel().getSelectedItem());
+    }
+
+    private SpinnerValueFactory<LocalTime> createSpinnerValueFactory() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return new SpinnerValueFactory<>() {
+            {
+                setConverter(new LocalTimeStringConverter(formatter, null));
+            }
+
+            @Override
+            public void decrement(int steps) {
+                setValue(getValue().minusMinutes(steps));
+            }
+
+            @Override
+            public void increment(int steps) {
+                setValue(getValue().plusMinutes(steps));
+            }
+        };
     }
 }

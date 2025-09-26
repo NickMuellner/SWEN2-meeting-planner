@@ -6,8 +6,14 @@ import org.example.meetingplanner.event.EventManager;
 import org.example.meetingplanner.repository.MeetingRepository;
 import org.example.meetingplanner.repository.MeetingRepositoryJpaImpl;
 import org.example.meetingplanner.service.MeetingListService;
-import org.example.meetingplanner.view.*;
-import org.example.meetingplanner.viewmodel.*;
+import org.example.meetingplanner.view.MainView;
+import org.example.meetingplanner.view.MeetingListView;
+import org.example.meetingplanner.view.MeetingManageView;
+import org.example.meetingplanner.view.MenuView;
+import org.example.meetingplanner.viewmodel.MainViewModel;
+import org.example.meetingplanner.viewmodel.MeetingListViewModel;
+import org.example.meetingplanner.viewmodel.MeetingManageViewModel;
+import org.example.meetingplanner.viewmodel.MenuViewModel;
 
 public class ViewFactory {
 

@@ -1,8 +1,8 @@
 package org.example.meetingplanner.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +11,10 @@ public class MeetingNote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     @Column(name = "note")
     private String note;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meeting_id")
     @JsonBackReference
@@ -22,7 +22,7 @@ public class MeetingNote {
 
     public MeetingNote() {
     }
-    
+
     public MeetingNote(String note) {
         this.note = note;
     }
@@ -51,11 +51,11 @@ public class MeetingNote {
     public void setNote(String note) {
         this.note = note;
     }
-    
+
     public Meeting getMeeting() {
         return meeting;
     }
-    
+
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
     }

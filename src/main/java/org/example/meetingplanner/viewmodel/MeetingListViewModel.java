@@ -14,6 +14,8 @@ import org.example.meetingplanner.model.Meeting;
 import org.example.meetingplanner.model.MeetingUpdateStatus;
 import org.example.meetingplanner.service.MeetingListService;
 
+import java.time.format.DateTimeFormatter;
+
 public class MeetingListViewModel {
 
     private final MeetingListService meetingListService;
@@ -61,11 +63,13 @@ public class MeetingListViewModel {
     }
 
     private void search(Object s) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
         String search = (String) s;
         meetings.getValue().setAll(meetingListService.getMeetings().stream().filter(
                 e -> e.getTitle().contains(search) ||
-                        e.getFrom().toString().contains(search) ||
-                        e.getTo().toString().contains(search) ||
+                        e.getFrom().format(dateTimeFormatter).contains(search) ||
+                        e.getTo().format(dateTimeFormatter).contains(search) ||
                         e.getAgenda().contains(search) ||
                         e.getNotes().stream().anyMatch(
                                 l -> l.getNote().contains(search)
@@ -89,6 +93,7 @@ public class MeetingListViewModel {
     public void deleteMeeting() {
         meetingListService.removeMeeting(selectedMeeting.getValue());
         meetings.getValue().setAll(meetingListService.getMeetings());
+        deleteMeetingVisible.setValue(false);
         displayStatus(MeetingUpdateStatus.SUCCESS);
     }
 

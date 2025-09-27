@@ -9,6 +9,7 @@ import org.example.meetingplanner.service.MeetingListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,49 +35,48 @@ class MeetingManageViewModelTest {
     void createMeetingMissingFields() {
         List<InvalidMeetingInput> invalidInputs = viewModel.createMeeting();
 
-        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_NAME));
-        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_FROM));
-        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_TO));
+        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_TITLE));
+        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_DATE));
+        assertTrue(invalidInputs.contains(InvalidMeetingInput.INVALID_TIME));
         assertEquals(0, repo.savedMeetings.size());
     }
 
     @Test
-    void createTourSuccessAddsMeeting() {
-        viewModel.titleProperty().set("Test");
-        viewModel.agendaProperty().set("desc");
-        viewModel.fromProperty().set("a");
-        viewModel.toProperty().set("b");
-        viewModel.agendaProperty().set("WALKING");
-        viewModel.distanceProperty().set("1");
-        viewModel.timeProperty().set("1h");
-        viewModel.informationProperty().set("info");
+    void createMeetingSuccessAddsMeeting() {
+        LocalDateTime now = LocalDateTime.now();
+
+        viewModel.titleProperty().set("Title");
+        viewModel.fromDateProperty().set(now.toLocalDate());
+        viewModel.toDateProperty().set(now.toLocalDate());
+        viewModel.fromTimeProperty().set(now.toLocalTime());
+        viewModel.toTimeProperty().set(now.toLocalTime().plusHours(1));
+        viewModel.agendaProperty().set("Agenda");
 
         List<InvalidMeetingInput> invalid = viewModel.createMeeting();
 
         assertTrue(invalid.isEmpty());
         assertEquals(1, repo.savedMeetings.size());
-        assertEquals("Test", repo.savedMeetings.get(0).getTitle());
+        assertEquals("Title", repo.savedMeetings.getFirst().getTitle());
     }
 
     @Test
-    void updateTourUpdatesSelectedMeeting() {
-        Meeting existing = new Meeting("Old", "old", "x", "y", "WALKING", "10", "1h", "info", false);
+    void updateMeetingUpdatesSelectedMeeting() {
+        LocalDateTime now = LocalDateTime.now();
+        Meeting existing = new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda");
         repo.savedMeetings.add(existing);
         meetingListService.selectMeeting(existing);
 
-        viewModel.titleProperty().set("NewName");
-        viewModel.agendaProperty().set("Desc");
-        viewModel.fromProperty().set("X");
-        viewModel.toProperty().set("Y");
-        viewModel.agendaProperty().set("CAR");
-        viewModel.distanceProperty().set("20");
-        viewModel.timeProperty().set("2h");
-        viewModel.informationProperty().set("new info");
+        viewModel.titleProperty().set("New Title");
+        viewModel.fromDateProperty().set(now.toLocalDate());
+        viewModel.toDateProperty().set(now.toLocalDate());
+        viewModel.fromTimeProperty().set(now.toLocalTime().plusHours(3));
+        viewModel.toTimeProperty().set(now.toLocalTime().plusHours(5));
+        viewModel.agendaProperty().set("New Agenda");
 
         List<InvalidMeetingInput> invalid = viewModel.updateMeeting();
 
         assertTrue(invalid.isEmpty());
-        assertEquals("NewName", existing.getTitle());
+        assertEquals("New Title", existing.getTitle());
     }
 
     private static class InMemoryRepo implements MeetingRepository {
@@ -85,11 +85,6 @@ class MeetingManageViewModelTest {
         @Override
         public List<Meeting> findAll() {
             return new ArrayList<>(savedMeetings);
-        }
-
-        @Override
-        public Meeting findById(int id) {
-            return savedMeetings.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
         }
 
         @Override

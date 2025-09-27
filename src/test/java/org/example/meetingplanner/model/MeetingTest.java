@@ -3,6 +3,8 @@ package org.example.meetingplanner.model;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,38 +12,33 @@ class MeetingTest {
 
     @Test
     void testConstructorSetsFields() {
-        Meeting meeting = new Meeting("Name", "Desc", "From", "To", "Car", "10km", "30m", "Info", false);
-        assertEquals("Name", meeting.getTitle());
-        assertEquals("Desc", meeting.getAgenda());
-        assertEquals("From", meeting.getFrom());
-        assertEquals("To", meeting.getTo());
-        assertEquals("Car", meeting.getTransportType());
-        assertEquals("10km", meeting.getTourDistance());
-        assertEquals("30m", meeting.getEstimatedTime());
-        assertEquals("Info", meeting.getRouteInformation());
+        LocalDateTime now = LocalDateTime.now();
+        Meeting meeting = new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda");
+        assertEquals("Title", meeting.getTitle());
+        assertEquals(now.plusHours(1), meeting.getFrom());
+        assertEquals(now.plusHours(2), meeting.getTo());
+        assertEquals("Agenda", meeting.getAgenda());
     }
 
     @Test
-    void testUpdateTourChangesFields() {
-        Meeting meeting = new Meeting("Old", "D", "A", "B", "Walk", "1km", "5m", "R", true);
-        meeting.updateTour("New", "Desc", "X", "Y", "Bike", "2km", "10m", "Info", false);
-        assertEquals("New", meeting.getTitle());
-        assertEquals("Desc", meeting.getAgenda());
-        assertEquals("X", meeting.getFrom());
-        assertEquals("Y", meeting.getTo());
-        assertEquals("Bike", meeting.getTransportType());
-        assertEquals("2km", meeting.getTourDistance());
-        assertEquals("10m", meeting.getEstimatedTime());
-        assertEquals("Info", meeting.getRouteInformation());
+    void testUpdateMeetingChangesFields() {
+        LocalDateTime now = LocalDateTime.now();
+        Meeting meeting = new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda");
+        meeting.updateMeeting("New Title", now.plusHours(3), now.plusHours(4), "New Agenda");
+        assertEquals("New Title", meeting.getTitle());
+        assertEquals(now.plusHours(3), meeting.getFrom());
+        assertEquals(now.plusHours(4), meeting.getTo());
+        assertEquals("New Agenda", meeting.getAgenda());
     }
 
     @Test
     void testAddRemoveLogs() {
-        Meeting meeting = new Meeting("n", "d", "f", "t", "b", "1", "2", "i", true);
-        MeetingNote log = new MeetingNote(LocalDate.now(), "c", 1, 2, 3, 4);
-        meeting.addToNotes(log);
-        assertTrue(meeting.getNotes().contains(log));
-        meeting.removeFromNotes(log);
-        assertFalse(meeting.getNotes().contains(log));
+        LocalDateTime now = LocalDateTime.now();
+        Meeting meeting = new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda");
+        MeetingNote note = new MeetingNote("Note");
+        meeting.updateNotes(List.of(note));
+        assertTrue(meeting.getNotes().contains(note));
+        meeting.removeFromNotes(note);
+        assertFalse(meeting.getNotes().contains(note));
     }
 }

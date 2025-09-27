@@ -24,26 +24,26 @@ class EventManagerAdditionalTest {
 
     @Test
     void testNoNotificationForUnsubscribedEvent() {
-        manager.subscribe(Event.TOUR_CREATED, listener1);
-        manager.publish(Event.TOUR_UPDATED, "msg");
+        manager.subscribe(Event.MEETING_CREATED, listener1);
+        manager.publish(Event.MEETING_UPDATED, "msg");
         assertTrue(listener1.messages.isEmpty());
     }
 
     @Test
     void testListenerReceivesMultipleEvents() {
-        manager.subscribe(Event.TOUR_CREATED, listener1);
-        manager.subscribe(Event.TOUR_UPDATED, listener1);
-        manager.publish(Event.TOUR_CREATED, "A");
-        manager.publish(Event.TOUR_UPDATED, "B");
+        manager.subscribe(Event.MEETING_CREATED, listener1);
+        manager.subscribe(Event.MEETING_UPDATED, listener1);
+        manager.publish(Event.MEETING_CREATED, "A");
+        manager.publish(Event.MEETING_UPDATED, "B");
         assertEquals(List.of("A", "B"), listener1.messages);
     }
 
     @Test
     void testDifferentListenersDifferentEvents() {
-        manager.subscribe(Event.TOUR_CREATED, listener1);
-        manager.subscribe(Event.TOUR_UPDATED, listener2);
-        manager.publish(Event.TOUR_CREATED, "A");
-        manager.publish(Event.TOUR_UPDATED, "B");
+        manager.subscribe(Event.MEETING_CREATED, listener1);
+        manager.subscribe(Event.MEETING_UPDATED, listener2);
+        manager.publish(Event.MEETING_CREATED, "A");
+        manager.publish(Event.MEETING_UPDATED, "B");
         assertEquals(List.of("A"), listener1.messages);
         assertEquals(List.of("B"), listener2.messages);
     }

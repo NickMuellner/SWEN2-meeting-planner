@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +23,15 @@ class MeetingListServiceTest {
     @BeforeEach
     void setup() {
         repo = new InMemoryRepository();
-        repo.meetings.add(new Meeting("one", "d", "f", "t", "car", "1", "2", "i", false));
+        LocalDateTime now = LocalDateTime.now();
+        repo.meetings.add(new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda"));
         eventManager = new EventManager();
         service = new MeetingListService(eventManager, repo);
     }
 
     @Test
     void testSelectAndDeselect() {
-        Meeting meeting = service.getMeetings().get(0);
+        Meeting meeting = service.getMeetings().getFirst();
         service.selectMeeting(meeting);
         assertEquals(meeting, service.getSelectedMeeting());
         service.deselectMeeting();
@@ -38,7 +40,8 @@ class MeetingListServiceTest {
 
     @Test
     void testAddAndRemoveMeeting() {
-        Meeting meeting = new Meeting("two", "d", "x", "y", "bike", "3", "4", "inf", false);
+        LocalDateTime now = LocalDateTime.now();
+        Meeting meeting = new Meeting("Title", now.plusHours(1), now.plusHours(2), "Agenda");
         service.addMeeting(meeting);
         assertTrue(service.getMeetings().contains(meeting));
         assertTrue(repo.meetings.contains(meeting));
@@ -50,16 +53,17 @@ class MeetingListServiceTest {
 
     @Test
     void testAddMeetingNoteAndUpdate() {
-        Meeting meeting = service.getMeetings().get(0);
+        Meeting meeting = service.getMeetings().getFirst();
         service.selectMeeting(meeting);
-        MeetingNote log = new MeetingNote(LocalDate.now(), "c", 1, 2, 3, 4);
-        service.addMeetingNote(log);
-        assertTrue(meeting.getNotes().contains(log));
-        assertTrue(repo.logs.contains(log));
+        MeetingNote note = new MeetingNote("Note");
+        service.updateMeetingNotes(List.of(note));
+        assertTrue(meeting.getNotes().contains(note));
+        assertTrue(repo.logs.contains(note));
 
-        service.updateMeeting("n", "d", "f", "t", "bus", "5", "6", "i", false);
-        assertEquals("n", meeting.getTitle());
-        assertEquals("bus", meeting.getTransportType());
+        LocalDateTime now = LocalDateTime.now();
+        service.updateMeeting("New Title", now.plusHours(5), now.plusHours(6), "Agenda");
+        assertEquals("New Title", meeting.getTitle());
+        assertEquals(now.plusHours(6), meeting.getTo());
     }
 
     private static class InMemoryRepository implements MeetingRepository {
@@ -69,11 +73,6 @@ class MeetingListServiceTest {
         @Override
         public List<Meeting> findAll() {
             return meetings;
-        }
-
-        @Override
-        public Meeting findById(int id) {
-            return meetings.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
         }
 
         @Override

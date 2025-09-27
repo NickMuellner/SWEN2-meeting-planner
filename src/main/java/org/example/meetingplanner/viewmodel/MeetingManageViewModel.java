@@ -89,16 +89,18 @@ public class MeetingManageViewModel {
         MeetingUpdateStatus status = MeetingUpdateStatus.SUCCESS;
         List<InvalidMeetingInput> invalidMeetingInput = new ArrayList<>();
 
-        Map<StringProperty, InvalidMeetingInput> inputs = Map.of(
-                title, InvalidMeetingInput.INVALID_TITLE
-                //from, InvalidMeetingInput.INVALID_FROM,
-                //to, InvalidMeetingInput.INVALID_TO todo
-        );
-        inputs.forEach((key, error) -> {
-            if (key.getValue() == null || key.getValue().trim().isEmpty()) {
-                invalidMeetingInput.add(error);
-            }
-        });
+        if (title.getValue() == null || title.getValue().trim().isEmpty()) {
+            invalidMeetingInput.add(InvalidMeetingInput.INVALID_TITLE);
+        }
+
+        if(fromDate.getValue() == null || fromDate.getValue().isAfter(toDate.getValue())) {
+            invalidMeetingInput.add(InvalidMeetingInput.INVALID_DATE);
+        }
+
+        if(fromDate.getValue() == null || fromTime.getValue() == null ||
+                (fromDate.getValue().isEqual(toDate.getValue()) && fromTime.getValue().isAfter(toTime.getValue()))) {
+            invalidMeetingInput.add(InvalidMeetingInput.INVALID_TIME);
+        }
 
         if (invalidMeetingInput.isEmpty()) {
             if (isNewMeeting) {

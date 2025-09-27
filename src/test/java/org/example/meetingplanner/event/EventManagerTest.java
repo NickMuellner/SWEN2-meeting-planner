@@ -22,22 +22,22 @@ class EventManagerTest {
 
     @Test
     void testSingleSubscriberReceivesMessage() {
-        eventManager.subscribe(Event.TOUR_SELECTED, listener);
-        eventManager.publish(Event.TOUR_SELECTED, "Hello World");
+        eventManager.subscribe(Event.MEETING_SELECTED, listener);
+        eventManager.publish(Event.MEETING_SELECTED, "Hello World");
 
         List<String> messages = listener.getMessages();
         assertEquals(1, messages.size(), "Listener should have received one message");
-        assertEquals("Hello World", messages.get(0), "The received message should match the published message");
+        assertEquals("Hello World", messages.getFirst(), "The received message should match the published message");
     }
 
     @Test
     void testMultipleSubscribersReceiveMessage() {
         TestEventListener secondListener = new TestEventListener();
 
-        eventManager.subscribe(Event.TOUR_SELECTED, listener);
-        eventManager.subscribe(Event.TOUR_SELECTED, secondListener);
+        eventManager.subscribe(Event.MEETING_SELECTED, listener);
+        eventManager.subscribe(Event.MEETING_SELECTED, secondListener);
 
-        eventManager.publish(Event.TOUR_SELECTED, "Multi Listener Message");
+        eventManager.publish(Event.MEETING_SELECTED, "Multi Listener Message");
 
         assertEquals(1, listener.getMessages().size(), "First listener should have received one message");
         assertEquals("Multi Listener Message", listener.getMessages().get(0));
@@ -48,15 +48,15 @@ class EventManagerTest {
 
     @Test
     void testPublishWithNoSubscribers() {
-        assertDoesNotThrow(() -> eventManager.publish(Event.TOUR_SELECTED, "No Subscribers"));
+        assertDoesNotThrow(() -> eventManager.publish(Event.MEETING_SELECTED, "No Subscribers"));
     }
 
     @Test
     void testDuplicateSubscription() {
-        eventManager.subscribe(Event.TOUR_SELECTED, listener);
-        eventManager.subscribe(Event.TOUR_SELECTED, listener);
+        eventManager.subscribe(Event.MEETING_SELECTED, listener);
+        eventManager.subscribe(Event.MEETING_SELECTED, listener);
 
-        eventManager.publish(Event.TOUR_SELECTED, "Duplicate Message");
+        eventManager.publish(Event.MEETING_SELECTED, "Duplicate Message");
 
         List<String> messages = listener.getMessages();
         assertEquals(2, messages.size(), "Listener should have received two messages");

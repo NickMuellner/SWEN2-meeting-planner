@@ -62,7 +62,7 @@ public class MenuView implements Initializable {
                 viewModel.meetingReport(selectedFile);
                 log.info("Meeting report exported to {}", selectedFile.getAbsolutePath());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));

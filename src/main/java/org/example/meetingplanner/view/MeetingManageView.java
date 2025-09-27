@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import javafx.util.converter.LocalTimeStringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +60,8 @@ public class MeetingManageView implements Initializable {
 
         fromTime.setValueFactory(fromTimeFactory);
         toTime.setValueFactory(toTimeFactory);
+        createConverter(fromDate);
+        createConverter(toDate);
 
         title.textProperty().bindBidirectional(viewModel.titleProperty());
         fromDate.valueProperty().bindBidirectional(viewModel.fromDateProperty());
@@ -68,10 +71,27 @@ public class MeetingManageView implements Initializable {
         agenda.textProperty().bindBidirectional(viewModel.agendaProperty());
         notes.setItems(viewModel.notesProperty());
 
-        fromDate.setValue(LocalDate.now());
-        toDate.setValue(LocalDate.now());
-        fromTimeFactory.setValue(LocalTime.now());
-        toTimeFactory.setValue(LocalTime.now().plusHours(1));
+        LocalDate nowDate = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+        fromDate.setValue(nowDate);
+        toDate.setValue(nowDate);
+        fromTimeFactory.setValue(nowTime);
+        toTimeFactory.setValue(nowTime.plusHours(1));
+    }
+
+    private void createConverter(DatePicker toDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        toDate.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return date != null ? date.format(formatter) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return (string != null && !string.isEmpty()) ? LocalDate.parse(string, formatter) : null;
+            }
+        });
     }
 
     public void setPopupMode(boolean popupMode) {
@@ -93,43 +113,32 @@ public class MeetingManageView implements Initializable {
 
     private boolean showInvalidInput(List<InvalidMeetingInput> invalidMeetingInput) {
         Map<TextInputControl, InvalidMeetingInput> inputsString = Map.of(
-                title, InvalidMeetingInput.INVALID_TITLE,
-                agenda, InvalidMeetingInput.INVALID_AGENDA
+                title, InvalidMeetingInput.INVALID_TITLE
         );
         Map<DatePicker, InvalidMeetingInput> inputsDate = Map.of(
-                fromDate, InvalidMeetingInput.INVALID_FROM,
-                toDate, InvalidMeetingInput.INVALID_TO
+                fromDate, InvalidMeetingInput.INVALID_DATE,
+                toDate, InvalidMeetingInput.INVALID_DATE
         );
         Map<Spinner<LocalTime>, InvalidMeetingInput> inputsTime = Map.of(
-                fromTime, InvalidMeetingInput.INVALID_FROM,
-                toTime, InvalidMeetingInput.INVALID_TO
+                fromTime, InvalidMeetingInput.INVALID_TIME,
+                toTime, InvalidMeetingInput.INVALID_TIME
         );
-        inputsString.forEach((key, invalidInput) -> {
-            if (invalidMeetingInput.contains(invalidInput)) {
-                key.setStyle("-fx-border-color: red; -fx-border-width: 1;");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-                pause.setOnFinished(e -> key.setStyle(""));
-                pause.play();
-            }
-        });
-        inputsDate.forEach((key, invalidInput) -> {
-            if (invalidMeetingInput.contains(invalidInput)) {
-                key.setStyle("-fx-border-color: red; -fx-border-width: 1;");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-                pause.setOnFinished(e -> key.setStyle(""));
-                pause.play();
-            }
-        });
-        inputsTime.forEach((key, invalidInput) -> {
-            if (invalidMeetingInput.contains(invalidInput)) {
-                key.setStyle("-fx-border-color: red; -fx-border-width: 1;");
-                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-                pause.setOnFinished(e -> key.setStyle(""));
-                pause.play();
-            }
-        });
+        checkInvalidInput(invalidMeetingInput, inputsString);
+        checkInvalidInput(invalidMeetingInput, inputsDate);
+        checkInvalidInput(invalidMeetingInput, inputsTime);
 
         return invalidMeetingInput.isEmpty();
+    }
+
+    private void checkInvalidInput(List<InvalidMeetingInput> invalidMeetingInput, Map<? extends Control, InvalidMeetingInput> input) {
+        input.forEach((key, invalidInput) -> {
+            if (invalidMeetingInput.contains(invalidInput)) {
+                key.setStyle("-fx-border-color: red; -fx-border-width: 1;");
+                PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+                pause.setOnFinished(e -> key.setStyle(""));
+                pause.play();
+            }
+        });
     }
 
     @FXML

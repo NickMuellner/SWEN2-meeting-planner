@@ -3,11 +3,7 @@ package org.example.meetingplanner.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import org.example.meetingplanner.util.LocalDateTimeDeserializer;
-import org.example.meetingplanner.util.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,13 +25,9 @@ public class Meeting {
     private String title;
 
     @Column(name = "from_datetime")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime from;
 
     @Column(name = "to_datetime")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime to;
 
     @Column(name = "agenda")

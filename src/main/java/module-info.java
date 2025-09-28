@@ -28,5 +28,4 @@ module org.example.meetingplanner {
     exports org.example.meetingplanner.service;
     exports org.example.meetingplanner.event;
     exports org.example.meetingplanner.repository;
-    exports org.example.meetingplanner.util;
 }

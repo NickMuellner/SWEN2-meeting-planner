@@ -11,7 +11,6 @@ public class MainViewModel {
 
     private final StringProperty searchText = new SimpleStringProperty("");
 
-
     private final BooleanProperty meetingManageViewVisible = new SimpleBooleanProperty();
 
     private final EventManager eventManager;

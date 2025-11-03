@@ -55,7 +55,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.18.3</version>
         </dependency>
-        
 
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -89,7 +88,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.4.4.Final</version>
         </dependency>
-
     </dependencies>
 
     <build>

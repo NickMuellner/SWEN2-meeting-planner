@@ -72,7 +72,7 @@ public class MeetingListView implements Initializable {
 
     @FXML
     public void addMeeting() throws IOException {
-        log.trace("Adding Meeting");
+        log.info("Adding Meeting");
         FXMLLoader loader = FXMLDependencyInjector.loader(
                 "meeting-manage-view.fxml",
                 Locale.ENGLISH
@@ -100,10 +100,10 @@ public class MeetingListView implements Initializable {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == yesButton) {
-            log.trace("Deleting Meeting");
+            log.info("Deleting Meeting");
             viewModel.deleteMeeting();
         } else {
-            log.trace("Meeting deletion cancelled by user.");
+            log.info("Meeting deletion cancelled by user.");
         }
     }
 }

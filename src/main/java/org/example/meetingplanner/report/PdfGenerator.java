@@ -38,7 +38,7 @@ public class PdfGenerator {
 
             String from = meeting.getFrom() != null ? DATE_FORMAT.format(meeting.getFrom()) : "-";
             String to = meeting.getTo() != null ? DATE_FORMAT.format(meeting.getTo()) : "-";
-            Paragraph dates = new Paragraph("Datum: " + from + " — " + to)
+            Paragraph dates = new Paragraph("Datum: " + from + " - " + to)
                     .setFontSize(11)
                     .setMarginBottom(8);
             document.add(dates);

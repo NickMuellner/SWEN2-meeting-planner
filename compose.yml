@@ -3,7 +3,6 @@ version: "3.8"
 services:
   postgres:
     image: postgres:15
-    restart: unless-stopped
     environment:
       POSTGRES_DB: meetingplanner
       POSTGRES_USER: admin

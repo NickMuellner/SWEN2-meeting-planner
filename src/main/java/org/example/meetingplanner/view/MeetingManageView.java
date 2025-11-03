@@ -156,6 +156,7 @@ public class MeetingManageView implements Initializable {
 
     @FXML
     private void deleteNote() {
+        log.trace("Deleting Meeting");
         notes.getItems().remove(notes.getSelectionModel().getSelectedItem());
     }
 
